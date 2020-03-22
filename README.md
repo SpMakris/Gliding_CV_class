@@ -1,5 +1,5 @@
 # Gliding_CV_class
-This implements 16bit pitch control voltages with adjustable glide/slew. Through the provided API, the user can attach whatever function needed to handle the output values. This enables the class to be used with a variety of DAC peripherals and configurations, as well as within a fully digital synthesizer system.
+This class implements 16bit pitch control voltages with adjustable glide/slew. Through the provided API, the user can attach whatever function needed to handle the output values. This enables the class to be used with a variety of DAC peripherals and configurations, as well as within a fully digital synthesizer system.
 
 
 # Usage
@@ -32,20 +32,31 @@ The tolerance value is used to determine when the current value is close enough 
 - void setCV_output_function(void (\*fptr)(uint16_t value)): attach the output callback
 - void unsetCV_output_function(): detach the output callback
 - uint16_t CV_update(): update the current CV value
+-	void set_note_range(uint8_t range): set the maximum note of the interface. Default is 128, resulting in an octave range of about 10.6 octaves. Smaller values increase the pitch resolution, at the cost of output octave range.
+
+# Setting the Octave Range
+By default, the class will devide the full 16 bit range to 128 intervals, corresponding to a full range of 10.6 octaves. This results in a resolution of 32 values per semitone. 
+If this is not deemed enough resolution, or a smaller output octave range is required, it can be configured by calling void set_note_range(uint8_t range). Range is given in number of notes: for example, 128 is 10.6 octaves (128/12) and 64 is 5.3 octaves (64/12). Values larger than the configured note_range will be set to the maximum note_range value instead.
+
 
 # Using with an STM32Cube IDE project - examples
-The CV_Class project demonstrates the use of the class with an STM32F072 microcontroller and the STM32Cube IDE:
+The CV_Class project demonstrates the use of the class with an STM32F072 microcontroller and the STM32Cube IDE.
+
 In the main.cpp file:
 - Create a CV object called pitch. Define it before the main() function, as a global variable.
 - Call 	pitch.CV_init(tolerance, glide_const, output_CV), to initialise the CV object.
-- void set_note(uint8_t note) interfaces the stm32f0xx_it.c file with the main.cpp file. Because the interrupt handler file is a .c it cannot interpret C++ commands directly.
+- void set_note(uint8_t note) interfaces the stm32f0xx_it.c file with the main.cpp file. Because the interrupt handler file is a .c it cannot interpret C++ commands using dot notation directly.
 - void run_update(): same as set_note above
 - output_CV(uint16_t valu) this function is called by the class every time it runs an update. The function checks if there is a different new value to output. If there is, the 16 bit CV value is shifted 4 times to downscale to 12bit then output by the DAC at channel 1.
 -Remember to call 	HAL_DAC_Start(&hdac, DAC_CHANNEL_1) and	HAL_TIM_Base_Start_IT(&htim2); to start the DAC and TIM peripherals.
 
 The CubeMX code generator places all interrupt functions in the stm32f0xx_it.c file. This particular example uses the TIM2 timer to run the CV_update() function, as well as vary the target notes in order to demonstrate functionality. All relevant code can be found under void TIM2_IRQHandler():
-- run_upadate() updates the CV value and calls the DAC callback
+- run_update() updates the CV value and calls the DAC callback
 - the rest of the commands vary the target notes for demonstrating purposes.
+
+
+# Analogue interfacing
+By default, this class is configured to be able to represent all 128 MIDI notes with the available 16 bit values. Most DACs have an output range of 0-3V or 0-5V, therefore some analogue circuitry will be required to increase the voltage to 1V/oct levels (10V peak to peak). For a full scale output (approximately 10 octaves), an amplification factor of ~3.5 will be needed, and a DC offset of about -1.5V (before amplification) or about -5V (after amplification). It is recommened that these are calibrated with multiturn trimmers.
 
 
 
