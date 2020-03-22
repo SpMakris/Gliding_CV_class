@@ -37,18 +37,19 @@ The tolerance value is used to determine when the current value is close enough 
 # Setting the Octave Range
 By default, the class will devide the full 16 bit range to 128 intervals, corresponding to a full range of 10.6 octaves. This results in a resolution of 32 values per semitone. 
 If this is not deemed enough resolution, or a smaller output octave range is required, it can be configured by calling void set_note_range(uint8_t range). Range is given in number of notes: for example, 128 is 10.6 octaves (128/12) and 64 is 5.3 octaves (64/12). Values larger than the configured note_range will be set to the maximum note_range value instead.
-
+The expected notes range from 0 to note_range-1 . It is left to the main program and the output callback to offset this range, if required.
 
 # Using with an STM32Cube IDE project - examples
-The CV_Class project demonstrates the use of the class with an STM32F072 microcontroller and the STM32Cube IDE.
+The CV_Class project demonstrates the use of the class with an STM32F072 microcontroller and the STM32Cube IDE. When creating a new project, the .h and .cpp files must be added in the corresponding Core/Inc and Core/Src files and #include "CV.h" added in main.cpp. 
 
-In the main.cpp file:
+
+In the main.cpp file if the project CV_Class (examples/STM32/CV_Class):
 - Create a CV object called pitch. Define it before the main() function, as a global variable.
 - Call 	pitch.CV_init(tolerance, glide_const, output_CV), to initialise the CV object.
-- void set_note(uint8_t note) interfaces the stm32f0xx_it.c file with the main.cpp file. Because the interrupt handler file is a .c it cannot interpret C++ commands using dot notation directly.
+- void set_note(uint8_t note) interfaces the stm32f0xx_it.c file with the main.cpp file.
 - void run_update(): same as set_note above
-- output_CV(uint16_t valu) this function is called by the class every time it runs an update. The function checks if there is a different new value to output. If there is, the 16 bit CV value is shifted 4 times to downscale to 12bit then output by the DAC at channel 1.
--Remember to call 	HAL_DAC_Start(&hdac, DAC_CHANNEL_1) and	HAL_TIM_Base_Start_IT(&htim2); to start the DAC and TIM peripherals.
+- output_CV(uint16_t value) this function is called by the class every time it runs an update. The function checks if there is a different new value to output. If there is, the 16 bit CV value is shifted 4 times to downscale to 12bit then output by the DAC at channel 1.
+-Remember to call 	HAL_DAC_Start(&hdac, DAC_CHANNEL_1) and	HAL_TIM_Base_Start_IT(&htim2); to start the DAC and TIM2 peripherals.
 
 The CubeMX code generator places all interrupt functions in the stm32f0xx_it.c file. This particular example uses the TIM2 timer to run the CV_update() function, as well as vary the target notes in order to demonstrate functionality. All relevant code can be found under void TIM2_IRQHandler():
 - run_update() updates the CV value and calls the DAC callback
