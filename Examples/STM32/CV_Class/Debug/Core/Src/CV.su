@@ -1,0 +1,19 @@
+CV.cpp:15:1:CV::CV()	16	static
+CV.cpp:24:6:void CV::CV_init(uint16_t, uint16_t, void (*)(uint16_t))	32	static
+CV.cpp:31:6:void CV::set_note_range(uint8_t)	16	static
+CV.cpp:39:1:CV::~CV()	16	static
+CV.cpp:39:1:virtual CV::~CV()	16	static
+CV.cpp:43:6:void CV::set_target_note(uint8_t)	16	static
+CV.cpp:51:9:uint8_t CV::get_target_note()	16	static
+CV.cpp:54:10:uint16_t CV::get_target_pitch()	16	static
+CV.cpp:57:10:uint16_t CV::get_current_pitch()	16	static
+CV.cpp:60:10:uint16_t CV::get_glide_const()	16	static
+CV.cpp:63:10:uint16_t CV::get_tolerance()	16	static
+CV.cpp:66:6:void CV::set_tolerance(uint16_t)	16	static
+CV.cpp:69:10:uint16_t CV::get_last_pitch()	16	static
+CV.cpp:72:10:uint16_t CV::get_Semitone()	16	static
+CV.cpp:76:6:void CV::set_target_raw(uint16_t)	16	static
+CV.cpp:80:6:void CV::set_glide(uint16_t)	16	static
+CV.cpp:88:10:uint16_t CV::CV_update()	32	static
+CV.cpp:122:6:void CV::setCV_output_function(void (*)(uint16_t))	16	static
+CV.cpp:125:6:void CV::unsetCV_output_function()	16	static

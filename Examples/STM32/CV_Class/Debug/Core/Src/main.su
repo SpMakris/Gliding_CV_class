@@ -1,0 +1,15 @@
+main.cpp:80:5:int main()	8	static
+main.cpp:130:6:void SystemClock_Config()	112	static
+main.cpp:173:13:void MX_DAC_Init()	16	static
+main.cpp:213:13:void MX_TIM2_Init()	64	static
+main.cpp:267:13:void MX_TSC_Init()	8	static
+main.cpp:307:13:void MX_USART3_UART_Init()	8	static
+main.cpp:340:13:void MX_USB_PCD_Init()	8	static
+main.cpp:370:13:void MX_GPIO_Init()	48	static
+main.cpp:407:6:void set_note(uint8_t)	16	static
+main.cpp:410:6:void output_CV(uint16_t)	16	static
+main.cpp:416:6:void run_update()	8	static
+main.cpp:425:6:void Error_Handler()	8	static
+main.cpp:430:1:void __static_initialization_and_destruction_0(int, int)	16	static
+main.cpp:430:1:cpp)	8	static
+main.cpp:430:1:cpp)	8	static
