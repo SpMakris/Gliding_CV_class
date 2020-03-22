@@ -144,16 +144,16 @@ void TIM2_IRQHandler(void) {
 	/* USER CODE END TIM2_IRQn 0 */
 	HAL_TIM_IRQHandler(&htim2);
 	/* USER CODE BEGIN TIM2_IRQn 1 */
-	run_update();
+	run_update(); //update the CV value and output
 	i++;
-	if (i == 500) {
+	if (i == 500) { // every so often set a different random note
 		i = 0;
 		note = rand() % 128;
 		set_note(note);
 		if (note > 127) {
 			note = 0;
 		}
-		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_9);
+		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_9); //flash the green LED whenever the output note changes
 	}
 	/* USER CODE END TIM2_IRQn 1 */
 }
