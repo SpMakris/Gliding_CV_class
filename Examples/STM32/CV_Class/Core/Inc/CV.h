@@ -27,6 +27,10 @@ public:
 	uint16_t get_last_pitch();
 	void CV_init(uint16_t tolerance, uint16_t glide_const,
 			void (*fptr)(uint16_t value));
+	void set_pitch_bend(int16_t pitch_bend);
+	void set_pitch_bend_range_note(uint8_t pitch_bend_range_note);
+	void set_pitch_bend_range_raw(uint16_t pitch_bend_range_raw);
+	void set_offset_1(uint16_t offset);
 	void set_tolerance(uint16_t tolerance);
 	void set_target_note(uint8_t note);
 	void set_target_raw(uint16_t target);
@@ -37,6 +41,9 @@ public:
 	void set_note_range(uint8_t range);
 	virtual ~CV();
 private:
+	uint16_t offset_1;
+	int16_t pitch_bend;
+	uint16_t pitch_bend_range;
 	uint16_t note_range;
 	uint16_t target_pitch;
 	uint16_t current_pitch;
@@ -44,6 +51,7 @@ private:
 	uint16_t tolerance;
 	uint16_t Semitone;
 	uint16_t last_pitch;
+	long map(long x, long in_min, long in_max, long out_min, long out_max);
 	void (*CV_output_function)(uint16_t DAC_value);
 };
 

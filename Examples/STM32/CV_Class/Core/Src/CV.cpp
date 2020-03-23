@@ -30,7 +30,7 @@ void CV::CV_init(uint16_t tolerance, uint16_t glide_const,
 
 void CV::set_note_range(uint8_t range) {
 	if (range > 1) {
-		note_range=range;
+		note_range = range;
 		Semitone = 0xffff / (note_range - 1);
 
 	}
@@ -41,8 +41,8 @@ CV::~CV() {
 }
 
 void CV::set_target_note(uint8_t note) {
-	if (note > (note_range-1)) {
-		note = note_range-1;
+	if (note > (note_range - 1)) {
+		note = note_range - 1;
 	}
 
 	target_pitch = note * Semitone;
@@ -83,12 +83,38 @@ void CV::set_glide(uint16_t glide_const) {
 		this->glide_const = 1;
 	}
 }
+void CV::set_pitch_bend(int pitch_bend) {
+	if (pitch_bend < -0x7fff) {
+		pitch_bend = -0x7fff;
+	} else if (pitch_bend > 0x7fff) {
+		pitch_bend = 0x7fff;
+	}
+	this->pitch_bend = map(pitch_bend, -0x7fff, 0x7fff, -pitch_bend_range,
+			pitch_bend_range);
+}
+
+void CV::set_pitch_bend_range_note(uint8_t pitch_bend_range_note) {
+	if (Semitone * pitch_bend_range_note > 0xffff) {
+		pitch_bend_range = 0xffff;
+	} else {
+		pitch_bend_range = Semitone * pitch_bend_range_note;
+	}
+}
+
+void CV::set_pitch_bend_range_raw(uint16_t pitch_bend_range_raw) {
+	pitch_bend_range = pitch_bend_range_raw;
+}
+
+void CV::set_offset_1(uint16_t offset) {
+	offset_1 = offset;
+}
 
 //to be called at regular intervals.
 uint16_t CV::CV_update() {
 	uint16_t specific_glide = glide_const;
 	uint16_t pitch_distance;
 	last_pitch = current_pitch;
+
 	if (target_pitch > current_pitch) {
 		pitch_distance = target_pitch - current_pitch;
 		if (pitch_distance <= tolerance) {
@@ -98,6 +124,7 @@ uint16_t CV::CV_update() {
 				specific_glide = pitch_distance;
 			}
 			current_pitch = current_pitch + pitch_distance / specific_glide;
+
 		}
 	}
 
@@ -113,10 +140,17 @@ uint16_t CV::CV_update() {
 		}
 	}
 
-	if (CV_output_function != 0) {
-		(*CV_output_function)(current_pitch);
+	if ((current_pitch + pitch_bend + offset_1) > 0xffff) {
+		if (CV_output_function != 0) {
+			(*CV_output_function)(0xffff);
+		}
+		return 0xffff;
+	} else {
+		if (CV_output_function != 0) {
+			(*CV_output_function)(current_pitch + pitch_bend + offset_1);
+		}
+		return current_pitch + pitch_bend + offset_1;
 	}
-	return current_pitch;
 }
 
 void CV::setCV_output_function(void (*fptr)(uint16_t value)) {
@@ -124,4 +158,8 @@ void CV::setCV_output_function(void (*fptr)(uint16_t value)) {
 }
 void CV::unsetCV_output_function() {
 	CV_output_function = 0;
+}
+
+long CV::map(long x, long in_min, long in_max, long out_min, long out_max) {
+	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }

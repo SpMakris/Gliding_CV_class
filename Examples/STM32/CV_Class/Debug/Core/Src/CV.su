@@ -14,6 +14,10 @@ CV.cpp:69:10:uint16_t CV::get_last_pitch()	16	static
 CV.cpp:72:10:uint16_t CV::get_Semitone()	16	static
 CV.cpp:76:6:void CV::set_target_raw(uint16_t)	16	static
 CV.cpp:80:6:void CV::set_glide(uint16_t)	16	static
-CV.cpp:88:10:uint16_t CV::CV_update()	32	static
-CV.cpp:122:6:void CV::setCV_output_function(void (*)(uint16_t))	16	static
-CV.cpp:125:6:void CV::unsetCV_output_function()	16	static
+CV.cpp:86:6:void CV::set_pitch_bend(int)	32	static
+CV.cpp:96:6:void CV::set_pitch_bend_range_note(uint8_t)	16	static
+CV.cpp:104:6:void CV::set_pitch_bend_range_raw(uint16_t)	16	static
+CV.cpp:109:10:uint16_t CV::CV_update()	32	static
+CV.cpp:151:6:void CV::setCV_output_function(void (*)(uint16_t))	16	static
+CV.cpp:154:6:void CV::unsetCV_output_function()	16	static
+CV.cpp:158:6:long int CV::map(long int, long int, long int, long int, long int)	24	static

@@ -108,7 +108,7 @@ int main(void) {
 	/* USER CODE BEGIN 2 */
 	HAL_DAC_Start(&hdac, DAC_CHANNEL_1);
 	HAL_TIM_Base_Start_IT(&htim2);
-	pitch.CV_init(10, 100, output_CV);
+	pitch.CV_init(10, 100, output_CV); // initialise the CV interface
 	static uint16_t i = 0;
 	static uint8_t note = 0;
 	/* USER CODE END 2 */
@@ -404,11 +404,11 @@ static void MX_GPIO_Init(void) {
 }
 
 /* USER CODE BEGIN 4 */
-void set_note(uint8_t note) {
+void set_note(uint8_t note) { //enable the .c file to call the class function
 	pitch.set_target_note(note);
 }
-void output_CV(uint16_t value) {
-	if (value != pitch.get_last_pitch()) {
+void output_CV(uint16_t value) { //DAC output handler
+	if (value != pitch.get_last_pitch()) {//check if the incoming value is different than the last
 		value=value>>4;
 		HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, (uint32_t) value);
 	}
