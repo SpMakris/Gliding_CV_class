@@ -35,7 +35,7 @@ The tolerance value is used to determine when the current value is close enough 
 -	void set_note_range(uint8_t range): set the maximum note of the interface. Default is 128, resulting in an octave range of about 10.6 octaves. Smaller values increase the pitch resolution, at the cost of output octave range.
 
 # Setting the Octave Range
-By default, the class will devide the full 16 bit range to 128 intervals, corresponding to a full range of 10.6 octaves. This results in a resolution of 32 values per semitone. 
+By default, the class will devide the full 16 bit range to 128 intervals, corresponding to a full range of 10.6 octaves. This results in a resolution of 512 values per semitone. 
 If this is not deemed enough resolution, or a smaller output octave range is required, it can be configured by calling void set_note_range(uint8_t range). Range is given in number of notes: for example, 128 is 10.6 octaves (128/12) and 64 is 5.3 octaves (64/12). Values larger than the configured note_range will be set to the maximum note_range value instead.
 The expected notes range from 0 to note_range-1 . It is left to the main program and the output callback to offset this range, if required.
 
